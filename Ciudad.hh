@@ -22,39 +22,40 @@ class Ciudad {
 
 private:
 
-    string nombre;
+    string id;
     
     map<int,Producto> inventario;
 
-    int peso_total;
-    int volumen_total;
+    double peso_total;
+    double volumen_total;
 
 public:
 
     /** @brief  Escribe el inventario, peso total y volumen total de la ciudad.
     \pre        <em>cierto</em>
-    \post       Se han escrito al canal de salida el inventario y atributos <em>peso_total</em>, <em>volumen_total</em> del parametro implicito
+    \post       Se han escrito al canal de salida el inventario y los atributos (peso_total, volumen_total) del parametro implicito
     \coste      *
     */
     void escribir() const;
 
     /** @brief  Comprueba si existe un producto con identificador "id" en el inventario de la ciudad.
     \pre        <em>cierto</em>
-    \post       El resultado indica si existe un producto con identificador <em>id</em> en el inventario del parametro implicito
+    \post       El resultado indica si existe Producto con identificador <em>id</em> en el inventario del parametro implicito
     \coste      *
     */
     bool existe_producto_en_inventario(const int id) const;
 
     /** @brief  Devuelve el producto con identificador "id" del inventario de la ciudad.
     \pre        Producto con identificador <em>id</em> existe en el inventario
-    \post       El resultado es la instancia de Producto con identificador <em>id</em> del inventario de la ciudad
+    \post       El resultado es la instancia de Producto con identificador <em>id</em> del inventario del parametro implicito
     \coste      *
     */
     Producto producto_con_id(const int id) const;
 
-    /** @brief  *
-    \pre        *
-    \post       *
+    /** @brief  Lee la informacion de un nuevo inventario desde el canal de entrada.
+    \pre        El canal de entrada contiene un entero N seguido de la informacion (id de Producto, cantidad, necesidad) de N productos
+    \post       El inventario del parametro implicito se reemplaza por el nuevo leido,
+                Las instancias de Producto del inventario antiguo se han desconstruido
     \coste      *
     */
     void leer_inventario();

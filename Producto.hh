@@ -26,13 +26,19 @@ private:
 
 public:
     
+    /** @brief  Lee la cantidad y la necesidad del producto desde el canal de entrada
+    \pre        El canal de entrada contiene 2 enteros CANT, WANT
+    \post       El parametro implicito pasa a tener cantidad = CANT, necesidad = WANT
+    \coste      *
+    */
+    void leer();
+    
     /** @brief  Escribe la cantidad y necesidad del producto
     \pre        <em>cierto</em>
-    \post       Se han escrito al canal de salida los atributos <em>cantidad</em> y <em>necesidad</em> del parametro implicito
+    \post       Se han escrito al canal de salida los atributos (cantidad, necesidad) del parametro implicito
     \coste      *
     */
     void escribir() const;
-
 };
 
 #endif

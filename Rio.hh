@@ -12,7 +12,7 @@
 #include "BinTree.hh"
 #include <iostream>
 #include <map>
-#include <string>
+#include <vector>
 #endif
 
 using namespace std;
@@ -26,9 +26,9 @@ class Rio {
 private:
     
     BinTree<Ciudad> cuenca;
+    map<string, Ciudad> id2ciudad;
     Barco barco;
-    map<int, pair<double,double>> informacion_productos;
-
+    vector<pair<double,double>> id2producto;
 public:
 
     /** @brief  Creadora por defecto.
@@ -40,29 +40,26 @@ public:
     {
         cuenca = BinTree<Ciudad>();
         barco = Barco();
-        informacion_productos = map<int, pair<double,double>>();
+        id2producto = vector<pair<double,double>>();
     }
 
-    /** @brief  *
-    \pre        En el canal de entrada...
-    \post       El parametro implicito pasa a...
+    /** @brief  Lee una nueva estructura de ciudades desde el canal de entrada.
+    \pre        El canal de entrada contiene una estructura arborea en pre-orden
+    \post       El parametro implicito pasa a contener una nueva estructura arborea de nuevas instancias de Ciudad,
+                Las nuevas instancias de Ciudad son vacias,
+                Las instancias de Ciudad anteriores a la operacion se han desconstruido,
+                La cronologia del Barco se ha borrado
     \coste      *
     */
     void leer_cuenca();
 
-    /** @brief  *
-    \pre        En el canal de entrada...
-    \post       El parametro implicito pasa a...
+    /** @brief  Lee la informacion de productos desde el canal de entrada.
+    \pre        El canal de entrada contiene <em>cantidad</em> parejas de pesos y volumenes
+    \post       El parametro implicito pasa a contener la nueva informacion de productos,
+                Los identificadores de los nuevos productos son correlativos a partir del ultimo producto existente antes de la operacion
     \coste      *
     */
-    void leer_informacion_productos();
-
-    /** @brief  *
-    \pre        En el canal de entrada...
-    \post       El parametro implicito pasa a...
-    \coste      *
-    */
-    void leer_barco();
+    void leer_informacion_productos(const int cantidad);
 
     
     /** @brief  Devuelve el barco del rio.
@@ -109,16 +106,9 @@ public:
     */
     double volumen_del_producto(const int id) const;
 
-    /** @brief  Añade la informacion de un producto nuevo.
-    \pre        <em>cierto</em>
-    \post       Se ha añadido la informacion (<em>peso</em> y <em>volumen</em>) de un producto nuevo a el parametro implicito
-    \coste      *
-    */
-    void agregar_producto(const double peso, const double volumen);
-
     /** @brief  Escribe la informacion (peso, volumen) de un producto.
     \pre        Informacion de producto con identificador <em>id</em> existe
-    \post       Se ha escrito al canal de salida la informacion de un producto con identificador <em>id</em>
+    \post       Se ha escrito al canal de salida la informacion de un producto (peso, volumen) con identificador <em>id</em>
     \coste      *
     */
     void escribir_producto(const int id) const;
@@ -136,7 +126,7 @@ public:
     \post       *
     \coste      *
     */
-    void hacer_viaje();
+    void hacer_viaje_en_barco();
 
     /** @brief  *
     \pre        *

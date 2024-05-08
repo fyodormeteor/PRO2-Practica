@@ -31,9 +31,17 @@ private:
 
 public:
 
+    /** @brief  Lee la informacion del barco.
+    \pre        En el canal de entrada estan preparados 4 enteros IDCOMPRAR, CANTCOMPRAR, IDVENDER, CANTVENDER
+    \post       El parametro implicito pasa a tener comprar_id = IDCOMPRAR, comprar_cantidad = CANTCOMPRAR, vender_id = IDVENDER, vender_cantidad = CANTVENDER
+    \coste      *
+    */
+    void leer() const;
+    
     /** @brief  Escribe la informacion del barco junto a su cronologia de viajes.
     \pre        <em>cierto</em>
-    \post       Se han escrito al canal de salida los atributos y la cronologia de viajes del parametro implicito
+    \post       Se han escrito al canal de salida los atributos (comprar_id, vender_id, comprar_cantidad, vender_cantidad)
+                y la cronologia de viajes del parametro implicito
     \coste      *
     */
     void escribir() const;
@@ -44,6 +52,13 @@ public:
     \coste      *
     */
     void modificar(const int id_comprar, const int cantidad_comprar, const int id_vender, const int cantidad_vender);
+
+    /** @brief  *
+    \pre        *
+    \post       *
+    \coste      *
+    */
+    void hacer_viaje(const BinTree<Ciudad>& b);
 
 };
 
