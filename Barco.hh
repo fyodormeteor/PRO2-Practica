@@ -32,6 +32,13 @@ private:
 
 public:
 
+    /** @brief  Creadora por defecto.
+    \pre        <em>cierto</em>
+    \post       *
+    \coste      *
+    */
+    Barco();
+    
     /** @brief  Lee la informacion del barco.
     \pre        En el canal de entrada estan preparados 4 enteros IDCOMPRAR, CANTCOMPRAR, IDVENDER, CANTVENDER
     \post       El parametro implicito pasa a tener comprar_id = IDCOMPRAR, comprar_cantidad = CANTCOMPRAR, vender_id = IDVENDER, vender_cantidad = CANTVENDER
@@ -59,7 +66,12 @@ public:
     \post       *
     \coste      *
     */
-    void hacer_viaje(const BinTree<string>& b, const map<string, Ciudad>& nombre2ciudad);
+    void hacer_viaje(const BinTree<string>& b, map<string, Ciudad>& nombre2ciudad);
+
+    // - compute auxiliar weighted tree (possibly with pair<weight,height>, where height of node = max(height.left, height.right) + 1)
+    // - travel aux tree parallel to original tree
+    // - modify cities during this travel
+    // - save the last city you sold/bought to/from, end the travel there
 
 };
 
