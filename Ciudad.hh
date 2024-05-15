@@ -10,6 +10,7 @@
 #ifndef NO_DIAGRAM
 #include <iostream>
 #include <map>
+#include <vector>
 #endif
 
 using namespace std;
@@ -22,7 +23,7 @@ class Ciudad {
 
 private:
 
-    string id;
+    string nombre;
     
     map<int,Producto> inventario;
 
@@ -31,6 +32,27 @@ private:
 
 public:
 
+    /** @brief  Creadora con identificador/nombre de la ciudad.
+    \pre        <em>cierto</em>
+    \post       *
+    \coste      *
+    */
+    Ciudad(string nombre);
+    
+    /** @brief  Escribe el peso total y volumen total de la ciudad.
+    \pre        <em>cierto</em>
+    \post       Se han escrito al canal de salida los atributos peso_total y volumen_total del parametro implicito
+    \coste      *
+    */
+    void escribir_peso_y_volumen() const;
+
+    /** @brief  Escribe el peso total y volumen total de la ciudad.
+    \pre        <em>cierto</em>
+    \post       Se han escrito al canal de salida los atributos peso_total y volumen_total del parametro implicito
+    \coste      *
+    */
+    void escribir_inventario() const;
+    
     /** @brief  Escribe el inventario, peso total y volumen total de la ciudad.
     \pre        <em>cierto</em>
     \post       Se han escrito al canal de salida el inventario y los atributos (peso_total, volumen_total) del parametro implicito
@@ -52,27 +74,26 @@ public:
     */
     Producto producto_con_id(const int id) const;
 
-    /** @brief  Lee la informacion de un nuevo inventario desde el canal de entrada.
-    \pre        El canal de entrada contiene un entero N seguido de la informacion (id de Producto, cantidad, necesidad) de N productos
-    \post       El inventario del parametro implicito se reemplaza por el nuevo leido,
-                Las instancias de Producto del inventario antiguo se han desconstruido
+    /** @brief  *
+    \pre        *
+    \post       *
     \coste      *
     */
-    void leer_inventario();
+    void reinicializar_inventario();
 
     /** @brief  *
     \pre        *
     \post       *
     \coste      *
     */
-    void agregar_inventario(const int id_prod, const int cantidad, const int necesidad);
+    void agregar_inventario(const int idprod, const double peso, const double volumen, const int cantidad, const int necesidad);
 
     /** @brief  *
     \pre        *
     \post       *
     \coste      *
     */
-    void modificar_inventario(const int id_prod, const int cantidad_nueva, const int necesidad_nueva);
+    void modificar_inventario(const int id_prod, const double peso, const double volumen, const int cantidad, const int necesidad);
 
     /** @brief  *
     \pre        *
@@ -80,6 +101,13 @@ public:
     \coste      *
     */
     void quitar_inventario(const int id_prod);
+
+    /** @brief  *
+    \pre        *
+    \post       *
+    \coste      *
+    */
+    void comerciar_con(Ciudad& c, const vector<pair<double,double>>& id2prodinfo);
 };
 
 #endif

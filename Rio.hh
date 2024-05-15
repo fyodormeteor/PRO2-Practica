@@ -25,10 +25,29 @@ class Rio {
 
 private:
     
-    BinTree<Ciudad> cuenca;
-    map<string, Ciudad> id2ciudad;
+    BinTree<string> cuenca;
     Barco barco;
-    vector<pair<double,double>> id2producto;
+    
+    map<string, Ciudad> nombre2ciudad;
+    vector<pair<double,double>> id2infoprod;
+
+    /** @brief  Auxiliar.
+    \pre        El canal de entrada contiene una estructura arborea en pre-orden,
+    \post       El resultado es un arbol binario con la estructura arborea,
+                Se han creado nuevas instancias de Ciudad con los identificadores leidos
+                del canal del entrada y se han guardado en un diccionario del parametro implicito
+    \coste      *
+    */
+    BinTree<string> leer_cuenca_rec();
+
+    /** @brief  Auxiliar.
+    \pre        *
+    \post       *
+                *
+    \coste      *
+    */
+    void redistribuir_rec(const BinTree<string>& b);
+
 public:
 
     /** @brief  Creadora por defecto.
@@ -36,19 +55,14 @@ public:
     \post       El resultado es un Rio vacio
     \coste      *
     */
-    Rio()
-    {
-        cuenca = BinTree<Ciudad>();
-        barco = Barco();
-        id2producto = vector<pair<double,double>>();
-    }
+    Rio();
 
     /** @brief  Lee una nueva estructura de ciudades desde el canal de entrada.
     \pre        El canal de entrada contiene una estructura arborea en pre-orden
     \post       El parametro implicito pasa a contener una nueva estructura arborea de nuevas instancias de Ciudad,
-                Las nuevas instancias de Ciudad son vacias,
                 Las instancias de Ciudad anteriores a la operacion se han desconstruido,
-                La cronologia del Barco se ha borrado
+                Las nuevas instancias de Ciudad se han guardado en un diccionario del parametro implicito
+                Barco se ha actualizado correctamente
     \coste      *
     */
     void leer_cuenca();
@@ -61,7 +75,6 @@ public:
     */
     void leer_informacion_productos(const int cantidad);
 
-    
     /** @brief  Devuelve el barco del rio.
     \pre        <em>cierto</em>
     \post       El resultado es la instancia de Barco perteneciente a el parametro implicito
@@ -69,21 +82,26 @@ public:
     */
     Barco barco_del_rio() const;
 
-
-    /** @brief  Comprueba si existe una ciudad con el identificador "id".
+    /** @brief  Comprueba si existe una ciudad con el identificador "nombre".
     \pre        <em>cierto</em>
-    \post       El resultado indica si Ciudad con identificador <em>id</em> existe
+    \post       El resultado indica si Ciudad con identificador <em>nombre</em> existe
+    \coste      Logarithmic in size*
+    */
+    bool existe_ciudad(const string nombre) const;
+
+    /** @brief  Devuelve la ciudad con el identificador "nombre".
+    \pre        Ciudad con identificador <em>nombre</em> existe
+    \post       El resultado es la instancia de Ciudad con identificador <em>nombre</em>
     \coste      *
     */
-    bool existe_ciudad(const string id) const;
-
-    /** @brief  Devuelve la ciudad con el identificador "id".
-    \pre        Ciudad con identificador <em>id</em> existe
-    \post       El resultado es la instancia de Ciudad con identificador <em>id</em>
+    Ciudad ciudad_con_nombre(const string nombre) const;
+    
+    /** @brief  *
+    \pre        El canal de entrada contiene el id de un producto que existe (int >= 0) y cantidad & necesidad (2 double >= 0)
+    \post       *
     \coste      *
     */
-    Ciudad ciudad_con_id(const string id) const;
-
+    void leer_y_poner_producto_ciudad(Ciudad& ciudad); // ¿const?
 
     /** @brief  Comprueba si existe un producto con identificador "id".
     \pre        <em>cierto</em>
@@ -120,7 +138,6 @@ public:
     */
     int cantidad_de_productos() const;
 
-
     /** @brief  *
     \pre        *
     \post       *
@@ -133,7 +150,7 @@ public:
     \post       *
     \coste      *
     */
-    void comerciar(const string id1, const string id2);
+    void comerciar(const string nombre1, const string nombre2);
 
     /** @brief  *
     \pre        *

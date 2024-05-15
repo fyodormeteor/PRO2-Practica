@@ -25,16 +25,27 @@ de proyecto completamente documentado, incluyendo los elementos privados.
 #define ERR_MISMOPRODUCTO           "no se puede comprar y vender el mismo producto"
 #define ERR_CIUDADNOTIENEPRODUCTO   "la ciudad no tiene el producto"
 #define ERR_CIUDADYATIENEPRODUCTO   "la ciudad ya tiene el producto"
+#define ERR_CIUDADREPETIDA          "ciudad repetida"
 #define ERR_COMANDOINVALIDO         "comando invalido"
 
-/** @brief Subrutina auxiliar para facilitar la escritura de errores
+/** @brief  Subrutina auxiliar para facilitar la escritura de errores.
 */
 void Error(string mensaje)
 {
     cout << "error: " << mensaje << endl;
 }
 
-/** @brief Programa principal para *
+/** @brief  Subrutina auxiliar para leer y quitar <em>n</em> elementos (double) del canal de entrada.
+            Util para poder seguir con la ejecucion del programa despues de un caso erroneo.
+\pre        n >= 0
+*/
+void Desechar(int n)
+{
+    double d;
+    for(int i = 0; i < n; ++i) cin >> d;
+}
+
+/** @brief  Programa principal para el proyecto
 */
 int main()
 {
@@ -57,31 +68,54 @@ int main()
             
             r.leer_cuenca();
         }
-        else if (command == "leer_inventario" or command == "li")
+        else if (command == "leer_inventario" or command == "li") //*
         {
             string idciudad;
-            cin >> idciudad;
+            int size_inventario;
+            cin >> idciudad >> size_inventario;
 
             cout << '#' << command << ' ' << idciudad << endl;
 
-            if (r.existe_ciudad(idciudad)) r.ciudad_con_id(idciudad).leer_inventario();
-            // Caso erroneo
-            else Error(ERR_CIUDADNOEXISTE);
+            if (!r.existe_ciudad(idciudad))
+            {
+                Error(ERR_CIUDADNOEXISTE);
+                Desechar(size_inventario);
+            }
+            // Caso sin errores
+            else
+            {
+                Ciudad c = r.ciudad_con_nombre(idciudad);
+                c.reinicializar_inventario();
+
+                for(int i = 0; i < size_inventario; ++i)
+                {
+                    r.leer_y_poner_producto_ciudad(c);
+                }
+            }
         }
-        else if (command == "leer_inventarios" or command == "ls")
+        else if (command == "leer_inventarios" or command == "ls") //*
         {
+            // Se garantiza que las ciudades existen.
+
             cout << '#' << command << endl;
             
             string idciudad;
             cin >> idciudad;
-
             while (idciudad != "#")
             {
-                if (r.existe_ciudad(idciudad)) r.ciudad_con_id(idciudad).leer_inventario();
-                // Caso erroneo
-                else Error(ERR_CIUDADNOEXISTE);
+                int n;
+                cin >> n;
+                
+                Ciudad c = r.ciudad_con_nombre(idciudad);
+                c.reinicializar_inventario();
+
+                for(int i = 0; i < n; ++i)
+                {
+                    r.leer_y_poner_producto_ciudad(c);
+                }
+
                 cin >> idciudad;
-            }  
+            }
         }
         else if (command == "modificar_barco" or command == "mb")
         {
@@ -134,7 +168,7 @@ int main()
 
             cout << '#' << command << ' ' << idciudad << endl;
 
-            if (r.existe_ciudad(idciudad)) r.ciudad_con_id(idciudad).escribir();
+            if (r.existe_ciudad(idciudad)) r.ciudad_con_nombre(idciudad).escribir();
             // Caso erroneo
             else Error(ERR_CIUDADNOEXISTE);
         }
@@ -146,11 +180,18 @@ int main()
 
             cout << '#' << command << ' ' << idciudad << ' ' << idprod << endl;
 
-            if      (!r.existe_producto(idprod))                                        Error(ERR_PRODUCTONOEXISTE);
-            else if (!r.existe_ciudad(idciudad))                                        Error(ERR_CIUDADNOEXISTE);
-            else if (r.ciudad_con_id(idciudad).existe_producto_en_inventario(idprod))   Error(ERR_CIUDADYATIENEPRODUCTO);
+            if      (!r.existe_producto(idprod))                                            Error(ERR_PRODUCTONOEXISTE);
+            else if (!r.existe_ciudad(idciudad))                                            Error(ERR_CIUDADNOEXISTE);
+            else if (r.ciudad_con_nombre(idciudad).existe_producto_en_inventario(idprod))   Error(ERR_CIUDADYATIENEPRODUCTO);
             // Caso sin errores
-            else r.ciudad_con_id(idciudad).agregar_inventario(idprod, cant, necd);
+            else
+            {
+                double p = r.peso_del_producto(idprod);
+                double v = r.volumen_del_producto(idprod);
+                Ciudad c = r.ciudad_con_nombre(idciudad);
+                c.agregar_inventario(idprod, p, v, cant, necd);
+                c.escribir_peso_y_volumen();
+            }
         }
         else if (command == "modificar_prod" or command == "mp")
         {
@@ -160,11 +201,18 @@ int main()
 
             cout << '#' << command << ' ' << idciudad << ' ' << idprod << endl;
 
-            if      (!r.existe_producto(idprod))                                        Error(ERR_PRODUCTONOEXISTE);
-            else if (!r.existe_ciudad(idciudad))                                        Error(ERR_CIUDADNOEXISTE);
-            else if (!r.ciudad_con_id(idciudad).existe_producto_en_inventario(idprod))  Error(ERR_CIUDADNOTIENEPRODUCTO);
+            if      (!r.existe_producto(idprod))                                            Error(ERR_PRODUCTONOEXISTE);
+            else if (!r.existe_ciudad(idciudad))                                            Error(ERR_CIUDADNOEXISTE);
+            else if (!r.ciudad_con_nombre(idciudad).existe_producto_en_inventario(idprod))  Error(ERR_CIUDADNOTIENEPRODUCTO);
             // Caso sin errores
-            else r.ciudad_con_id(idciudad).modificar_inventario(idprod, cant, necd);
+            else
+            {
+                double p = r.peso_del_producto(idprod);
+                double v = r.volumen_del_producto(idprod);
+                Ciudad c = r.ciudad_con_nombre(idciudad);
+                c.modificar_inventario(idprod, p, v, cant, necd);
+                c.escribir_peso_y_volumen();
+            }
         }
         else if (command == "quitar_prod" or command == "qp")
         {
@@ -174,11 +222,16 @@ int main()
 
             cout << '#' << command << ' ' << idciudad << ' ' << idprod << endl;
 
-            if      (!r.existe_producto(idprod))                                        Error(ERR_PRODUCTONOEXISTE);
-            else if (!r.existe_ciudad(idciudad))                                        Error(ERR_CIUDADNOEXISTE);
-            else if (!r.ciudad_con_id(idciudad).existe_producto_en_inventario(idprod))  Error(ERR_CIUDADNOTIENEPRODUCTO);
+            if      (!r.existe_producto(idprod))                                            Error(ERR_PRODUCTONOEXISTE);
+            else if (!r.existe_ciudad(idciudad))                                            Error(ERR_CIUDADNOEXISTE);
+            else if (!r.ciudad_con_nombre(idciudad).existe_producto_en_inventario(idprod))  Error(ERR_CIUDADNOTIENEPRODUCTO);
             // Caso sin errores
-            else r.ciudad_con_id(idciudad).quitar_inventario(idprod);
+            else
+            {
+                Ciudad c = r.ciudad_con_nombre(idciudad);
+                c.quitar_inventario(idprod);
+                c.escribir_peso_y_volumen();
+            }
         }
         else if (command == "consultar_prod" or command == "cp")
         {
@@ -188,11 +241,11 @@ int main()
 
             cout << '#' << command << ' ' << idciudad << ' ' << idprod << endl;
 
-            if      (!r.existe_producto(idprod))                                        Error(ERR_PRODUCTONOEXISTE);
-            else if (!r.existe_ciudad(idciudad))                                        Error(ERR_CIUDADNOEXISTE);
-            else if (!r.ciudad_con_id(idciudad).existe_producto_en_inventario(idprod))  Error(ERR_CIUDADNOTIENEPRODUCTO);
+            if      (!r.existe_producto(idprod))                                            Error(ERR_PRODUCTONOEXISTE);
+            else if (!r.existe_ciudad(idciudad))                                            Error(ERR_CIUDADNOEXISTE);
+            else if (!r.ciudad_con_nombre(idciudad).existe_producto_en_inventario(idprod))  Error(ERR_CIUDADNOTIENEPRODUCTO);
             // Caso sin errores
-            else r.ciudad_con_id(idciudad).producto_con_id(idprod).escribir();
+            else r.ciudad_con_nombre(idciudad).producto_con_id(idprod).escribir();
         }
         else if (command == "comerciar" or command == "co")
         {
@@ -201,9 +254,10 @@ int main()
 
             cout << '#' << command << ' ' << idciudad1 << ' ' << idciudad2 << endl;
 
-            if (r.existe_ciudad(idciudad1) and r.existe_ciudad(idciudad2)) r.comerciar(idciudad1, idciudad2);
-            // Caso erroneo
-            else Error(ERR_CIUDADNOEXISTE);
+            if      (!r.existe_ciudad(idciudad1) or !r.existe_ciudad(idciudad2))    Error(ERR_CIUDADNOEXISTE);
+            else if (idciudad1 == idciudad2)                                        Error(ERR_CIUDADREPETIDA);
+            // Caso sin errores
+            else r.comerciar(idciudad1, idciudad2);
         }
         else if (command == "redistribuir" or command == "re")
         {
@@ -215,7 +269,7 @@ int main()
         {
             cout << '#' << command << endl;
             
-            r.hacer_viaje();
+            r.hacer_viaje_en_barco();
         }
         else
         {

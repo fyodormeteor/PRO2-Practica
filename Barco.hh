@@ -8,6 +8,7 @@
 #include "Producto.hh"
 
 #ifndef NO_DIAGRAM
+#include "BinTree.hh"
 #include <iostream>
 #include <list>
 #endif
@@ -58,7 +59,7 @@ public:
     \post       *
     \coste      *
     */
-    void hacer_viaje(const BinTree<Ciudad>& b);
+    void hacer_viaje(const BinTree<string>& b, const map<string, Ciudad>& nombre2ciudad);
 
 };
 
