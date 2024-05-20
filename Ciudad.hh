@@ -23,8 +23,6 @@ class Ciudad {
 
 private:
 
-    string nombre;
-    
     map<int,Producto> inventario;
 
     double peso_total;
@@ -32,12 +30,12 @@ private:
 
 public:
 
-    /** @brief  Creadora con identificador/nombre de la ciudad.
+    /** @brief  Creadora por defecto.
     \pre        <em>cierto</em>
     \post       *
     \coste      *
     */
-    Ciudad(string nombre);
+    Ciudad();
     
     /** @brief  Escribe el peso total y volumen total de la ciudad.
     \pre        <em>cierto</em>
@@ -46,9 +44,9 @@ public:
     */
     void escribir_peso_y_volumen() const;
 
-    /** @brief  Escribe el peso total y volumen total de la ciudad.
+    /** @brief  *
     \pre        <em>cierto</em>
-    \post       Se han escrito al canal de salida los atributos peso_total y volumen_total del parametro implicito
+    \post       *
     \coste      *
     */
     void escribir_inventario() const;
@@ -67,12 +65,12 @@ public:
     */
     bool existe_producto_en_inventario(const int id) const;
 
-    /** @brief  Devuelve el producto con identificador "id" del inventario de la ciudad.
-    \pre        Producto con identificador <em>id</em> existe en el inventario
-    \post       El resultado es la instancia de Producto con identificador <em>id</em> del inventario del parametro implicito
+    /** @brief  *
+    \pre        *
+    \post       *
     \coste      *
     */
-    Producto producto_con_id(const int id) const;
+    void escribir_producto(int id) const;
 
     /** @brief  *
     \pre        *
@@ -89,25 +87,60 @@ public:
     void agregar_inventario(const int idprod, const double peso, const double volumen, const int cantidad, const int necesidad);
 
     /** @brief  *
-    \pre        *
+    \pre        Ciudad tiene el producto*
     \post       *
     \coste      *
     */
-    void modificar_inventario(const int id_prod, const double peso, const double volumen, const int cantidad, const int necesidad);
+    void modificar_inventario(const int idprod, const double peso, const double volumen, const int cantidad, const int necesidad);
+
+    /** @brief  *
+    \pre        Ciudad tiene el producto*
+    \post       *
+    \coste      *
+    */
+    void quitar_inventario(const int idprod, const double peso, const double volumen);
 
     /** @brief  *
     \pre        *
     \post       *
     \coste      *
     */
-    void quitar_inventario(const int id_prod);
+    int cantidad_de_producto_en_inventario(const int idprod) const;
 
     /** @brief  *
     \pre        *
     \post       *
     \coste      *
     */
-    void comerciar_con(Ciudad& c, const vector<pair<double,double>>& id2prodinfo);
+    int necesidad_de_producto_en_inventario(const int idprod) const;
+    
+    /** @brief  *
+    \pre        *
+    \post       *
+    \coste      *
+    */
+    int exceso_de_producto_en_inventario(const int idprod) const;
+
+    /** @brief  *
+    \pre        *
+    \post       *
+    \coste      *
+    */
+    int comprar_producto(const int idprod, int& cantidad_disponible, const double peso, const double volumen);
+
+    /** @brief  *
+    \pre        *
+    \post       *
+    \coste      *
+    */
+    int vender_producto(const int idprod, int& cantidad_disponible, const double peso, const double volumen);
+
+    /** @brief  *
+    \pre        *
+    \post       *
+    \coste      *
+    */
+    void comerciar_con(Ciudad& c, const vector<pair<double,double>>& id2infoprod);
 };
 
 #endif

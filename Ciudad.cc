@@ -1,9 +1,7 @@
 #include "Ciudad.hh"
 
-Ciudad::Ciudad(string nombre)
+Ciudad::Ciudad()
 {
-    this->nombre = nombre;
-
     peso_total = .0;
     volumen_total = .0;
 }
@@ -20,10 +18,8 @@ void Ciudad::escribir_inventario() const
     while(it != inventario.end())
     {
         int id = it->first;
-        Producto p = it->second;
-
-        cout << id << ' ';
-        p.escribir();
+        cout << id+1 << ' ';
+        escribir_producto(id+1);
 
         it++;
     }
@@ -37,11 +33,75 @@ void Ciudad::escribir() const
 
 bool Ciudad::existe_producto_en_inventario(const int id) const
 {
-    if (inventario.count(id) == 1) return true;
+    if (inventario.count(id-1) == 1) return true;
     return false;
 }
 
-void Ciudad::comerciar_con(Ciudad& c, const vector<pair<double,double>>& id2prodinfo)
+void Ciudad::escribir_producto(int id) const
+{
+    inventario.at(id-1).escribir();
+}
+
+void Ciudad::reinicializar_inventario()
+{
+    inventario.clear(); // .clear() Linear in size
+    peso_total = .0;
+    volumen_total = .0;
+}
+
+void Ciudad::agregar_inventario(const int idprod, const double peso, const double volumen, const int cantidad, const int necesidad)
+{
+    inventario[idprod-1] = Producto(cantidad, necesidad);
+    peso_total += peso*cantidad;
+    volumen_total += volumen*cantidad;
+}
+
+void Ciudad::modificar_inventario(const int idprod, const double peso, const double volumen, const int cantidad, const int necesidad)
+{
+    peso_total -= cantidad_de_producto_en_inventario(idprod)*peso;
+    volumen_total -= cantidad_de_producto_en_inventario(idprod)*volumen;
+
+    inventario[idprod-1].establecer_cantidad(cantidad);
+    inventario[idprod-1].establecer_necesidad(necesidad);
+
+    peso_total += cantidad*peso;
+    volumen_total += cantidad*volumen;
+}
+
+void Ciudad::quitar_inventario(const int idprod, const double peso, const double volumen)
+{
+    peso_total -= cantidad_de_producto_en_inventario(idprod)*peso;
+    volumen_total -= cantidad_de_producto_en_inventario(idprod)*volumen;
+    
+    inventario.erase(idprod-1); // .erase(key) Logarithmic in size
+}
+
+int Ciudad::cantidad_de_producto_en_inventario(const int idprod) const
+{
+    return inventario.at(idprod-1).obtener_cantidad();
+}
+
+int Ciudad::necesidad_de_producto_en_inventario(const int idprod) const
+{
+    return inventario.at(idprod-1).obtener_necesidad();
+}
+
+int Ciudad::exceso_de_producto_en_inventario(const int idprod) const
+{
+    return inventario.at(idprod-1).obtener_exceso();
+}
+
+int Ciudad::comprar_producto(const int idprod, int& cantidad_disponible, const double peso, const double volumen)
+{
+
+}
+
+int Ciudad::vender_producto(const int idprod, int& cantidad_disponible, const double peso, const double volumen)
+{
+
+}
+
+void Ciudad::comerciar_con(Ciudad& c, const vector<pair<double,double>>& id2infoprod)
 {
     map<int,Producto>::iterator it1 = inventario.begin();
     map<int,Producto>::iterator it2 = c.inventario.begin();
@@ -58,11 +118,8 @@ void Ciudad::comerciar_con(Ciudad& c, const vector<pair<double,double>>& id2prod
 
         if (it1->first == it2->first)
         {
-            Producto p1 = it1->second;
-            Producto p2 = it2->second;
-
-            int c1_exceso = p1.obtener_exceso();
-            int c2_exceso = p2.obtener_exceso();
+            int c1_exceso = it1->second.obtener_exceso();
+            int c2_exceso = it2->second.obtener_exceso();
 
             // 2 casos:
             //     - Ambas ciudades quieren o les sobra el producto:      no hacer nada
@@ -72,22 +129,22 @@ void Ciudad::comerciar_con(Ciudad& c, const vector<pair<double,double>>& id2prod
             {
                 int cantidad_comerciada = min(c2_exceso, -c1_exceso);
 
-                p1 += cantidad_comerciada;
-                p2 += -cantidad_comerciada;
+                it1->second += cantidad_comerciada;
+                it2->second += -cantidad_comerciada;
 
-                cambio_peso += cantidad_comerciada * id2prodinfo[it1->first].first;
-                cambio_volumen += cantidad_comerciada * id2prodinfo[it1->first].second;
+                cambio_peso += cantidad_comerciada * id2infoprod[it1->first].first;
+                cambio_volumen += cantidad_comerciada * id2infoprod[it1->first].second;
             }
 
             if (c2_exceso < 0 and c1_exceso > 0) // Ciudad c quiere y a Ciudad implicita le sobra
             {
                 int cantidad_comerciada = min(c1_exceso, -c2_exceso);
 
-                p1 += -cantidad_comerciada;
-                p2 += cantidad_comerciada;
+                it1->second += -cantidad_comerciada;
+                it2->second += cantidad_comerciada;
 
-                cambio_peso -= cantidad_comerciada * id2prodinfo[it1->first].first;
-                cambio_volumen -= cantidad_comerciada * id2prodinfo[it1->first].second;
+                cambio_peso -= cantidad_comerciada * id2infoprod[it1->first].first;
+                cambio_volumen -= cantidad_comerciada * id2infoprod[it1->first].second;
             }
 
             it1++;

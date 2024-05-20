@@ -24,21 +24,17 @@ private:
 
 public:
     
-    /** @brief  Creadora por defecto.
-    \pre        <em>cierto</em>
-    \post       El resultado es *
-    \coste      *
-    */
+    // ??
     Producto();
     
-    /** @brief  Lee la cantidad y la necesidad del producto desde el canal de entrada
-    \pre        El canal de entrada contiene 2 enteros CANT, NECD
-    \post       El parametro implicito pasa a tener cantidad = CANT, necesidad = NECD
+    /** @brief  Creadora que inicializa la cantidad y la necesidad.
+    \pre        <em>cant</em> >= 0, <em>necd</em> > 0
+    \post       El resultado es Producto con atributos <em>cantidad</em> y <em>necesidad</em>
     \coste      *
     */
-    void leer();
+    Producto(const int cant, const int necd);
     
-    /** @brief  Escribe la cantidad y necesidad del producto
+    /** @brief  Escribe la cantidad y necesidad del producto.
     \pre        <em>cierto</em>
     \post       Se han escrito al canal de salida los atributos (cantidad, necesidad) del parametro implicito
     \coste      *
@@ -67,25 +63,25 @@ public:
     int obtener_exceso() const;
    
     /** @brief  *
-    \pre        * (no es 'cierto')
+    \pre        <em>cant</em> >= 0
     \post       *
     \coste      *
     */
     void establecer_cantidad(const int cant);
 
     /** @brief  *
-    \pre        * (no es 'cierto')
+    \pre        <em>necd</em> > 0
     \post       *
     \coste      *
     */
     void establecer_necesidad(const int necd);
 
-    /** @brief  Añadir cantidad*
+    /** @brief  Definicion del operador += para sumar valores al atributo necesidad.
     \pre        *
     \post       *
     \coste      *
     */
-    void operator+=(const int cantidad);
+    void operator+=(const int cant);
 };
 
 #endif
