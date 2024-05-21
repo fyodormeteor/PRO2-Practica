@@ -1,5 +1,5 @@
 OPCIONS = 
-# -D_JUDGE_ -D_GLIBCXX_DEBUG -O2 -Wall -Wextra -Werror -Wno-sign-compare -std=c++11 -fno-extended-identifiers
+#-D_JUDGE_ -D_GLIBCXX_DEBUG -O2 -Wall -Wextra -Werror -Wno-sign-compare -std=c++11 -fno-extended-identifiers
 
 x: program.o Rio.o Ciudad.o Barco.o Producto.o BinTree.o
 	g++ -o x program.o Rio.o Ciudad.o Barco.o Producto.o BinTree.o

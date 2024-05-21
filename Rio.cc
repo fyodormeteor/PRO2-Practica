@@ -40,7 +40,7 @@ void Rio::leer_informacion_productos(const int cantidad)
     {
         double p, v;
         cin >> p >> v;
-        id2infoprod.emplace_back(p, v);
+        id2infoprod.push_back(make_pair(p, v));
     }
 }
 
@@ -147,7 +147,7 @@ void Rio::escribir_barco()
 
 void Rio::hacer_viaje_en_barco()
 {
-    barco.hacer_viaje(cuenca, nombre2ciudad);
+    barco.hacer_viaje(cuenca, nombre2ciudad, id2infoprod);
 }
 
 void Rio::comerciar(const string nombre1, const string nombre2)
@@ -163,19 +163,19 @@ void Rio::redistribuir()
 
 void Rio::redistribuir_rec(const BinTree<string>& b)
 {
-    Ciudad c = nombre2ciudad.at(b.value());
+    string c = b.value();
 
     if (!b.left().empty())
     {
-        Ciudad c1 = nombre2ciudad.at(b.left().value());
-        c.comerciar_con(c1, id2infoprod);
+        string c1 = b.left().value();
+        comerciar(c, c1);
         redistribuir_rec(b.left());
     }
 
     if (!b.right().empty())
     {
-        Ciudad c2 = nombre2ciudad.at(b.right().value());
-        c.comerciar_con(c2, id2infoprod);
+        string c2 = b.right().value();
+        comerciar(c, c2);
         redistribuir_rec(b.right());
     }
 }

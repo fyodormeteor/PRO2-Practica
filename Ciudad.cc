@@ -91,14 +91,20 @@ int Ciudad::exceso_de_producto_en_inventario(const int idprod) const
     return inventario.at(idprod-1).obtener_exceso();
 }
 
-int Ciudad::comprar_producto(const int idprod, int& cantidad_disponible, const double peso, const double volumen)
+void Ciudad::comprar_producto(const int idprod, int cantidad, const double peso, const double volumen)
 {
+    inventario.at(idprod) += cantidad;
 
+    peso_total += peso*cantidad;
+    volumen_total += volumen*cantidad;
 }
 
-int Ciudad::vender_producto(const int idprod, int& cantidad_disponible, const double peso, const double volumen)
+void Ciudad::vender_producto(const int idprod, int cantidad, const double peso, const double volumen)
 {
+    inventario.at(idprod) += -cantidad;
 
+    peso_total -= peso*cantidad;
+    volumen_total -= volumen*cantidad;
 }
 
 void Ciudad::comerciar_con(Ciudad& c, const vector<pair<double,double>>& id2infoprod)

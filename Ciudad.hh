@@ -126,14 +126,14 @@ public:
     \post       *
     \coste      *
     */
-    int comprar_producto(const int idprod, int& cantidad_disponible, const double peso, const double volumen);
+    void comprar_producto(const int idprod, int cantidad, const double peso, const double volumen);
 
     /** @brief  *
     \pre        *
     \post       *
     \coste      *
     */
-    int vender_producto(const int idprod, int& cantidad_disponible, const double peso, const double volumen);
+    void vender_producto(const int idprod, int cantidad, const double peso, const double volumen);
 
     /** @brief  *
     \pre        *

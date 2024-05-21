@@ -15,6 +15,31 @@
 
 using namespace std;
 
+struct InfoViaje
+{
+    int altura;
+    int compra_acumulada;
+    int venta_acumulada;
+    int compra;
+    int venta;
+    
+    InfoViaje()
+    {
+        altura = 0;
+        compra = 0;
+        venta  = 0;
+        compra_acumulada = 0;
+        venta_acumulada = 0;
+    }
+
+    int potencial() const
+    {
+        return compra_acumulada+venta_acumulada;
+    }
+
+};
+
+
 /** @class Barco
     @brief *
 */
@@ -31,6 +56,13 @@ private:
     int vender_cantidad;
 
     list<string> cronologia;
+
+    BinTree<InfoViaje> hacer_viaje_arbol_aux
+    (const BinTree<string>& cuenca, const map<string, Ciudad>& nombre2ciudad, int potencial_comprar, int potencial_vender);
+
+    void hacer_viaje_modificar_ciudades
+    (const BinTree<string>& cuenca, map<string, Ciudad>& nombre2ciudad, const BinTree<InfoViaje>& aux,
+     double pes_com, double vol_com, double pes_ven, double vol_ven, string& id_ciudad);
 
 public:
 

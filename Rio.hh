@@ -30,6 +30,7 @@ private:
     
     map<string, Ciudad> nombre2ciudad;
     vector<pair<double,double>> id2infoprod;
+    
 
     /** @brief  Auxiliar.
     \pre        El canal de entrada contiene una estructura arborea en pre-orden,
