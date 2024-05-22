@@ -45,7 +45,7 @@ void Barco::reinicializar_cronologia()
     cronologia.clear(); // .clear() Linear in size
 }
 
-void Barco::hacer_viaje(const BinTree<string>& cuenca, map<string, Ciudad>& nombre2ciudad, const vector<pair<double,double>> id2infoprod)
+void Barco::hacer_viaje(const BinTree<string>& cuenca, map<string, Ciudad>& nombre2ciudad, const vector<pair<int,int>> id2infoprod)
 {
     if (!ini)
     {
@@ -55,52 +55,61 @@ void Barco::hacer_viaje(const BinTree<string>& cuenca, map<string, Ciudad>& nomb
 
     auto arbol_aux = hacer_viaje_arbol_aux(cuenca, nombre2ciudad, comprar_cantidad, vender_cantidad);
 
-    double pes_com = id2infoprod.at(comprar_id-1).first;
-    double vol_com = id2infoprod.at(comprar_id-1).second;
-    double pes_ven = id2infoprod.at(vender_id-1).first;
-    double vol_ven = id2infoprod.at(vender_id-1).second;
+    int pes_com = id2infoprod.at(comprar_id-1).first;
+    int vol_com = id2infoprod.at(comprar_id-1).second;
+    int pes_ven = id2infoprod.at(vender_id-1).first;
+    int vol_ven = id2infoprod.at(vender_id-1).second;
 
     string ultima_ciudad = "";
 
     if (arbol_aux.value().altura != 0)
-    {
         hacer_viaje_modificar_ciudades(cuenca, nombre2ciudad, arbol_aux, pes_com, vol_com, pes_ven, vol_ven, ultima_ciudad);
-        cronologia.push_back(ultima_ciudad);
-    }
+
+    if (arbol_aux.value().potencial() != 0) cronologia.push_back(ultima_ciudad);
 
     cout << arbol_aux.value().potencial() << endl;
 }
 
 void Barco::hacer_viaje_modificar_ciudades
 (const BinTree<string>& cuenca, map<string, Ciudad>& nombre2ciudad, const BinTree<InfoViaje>& aux,
- double pes_com, double vol_com, double pes_ven, double vol_ven, string& id_ciudad)
+ int pes_com, int vol_com, int pes_ven, int vol_ven, string& id_ciudad)
 {
-    int h = aux.value().altura;
+    InfoViaje in = aux.value();
     
-    if (h == 1)
+    if (in.compra > 0 or in.venta > 0)
     {
         id_ciudad = cuenca.value();
-        if (aux.value().compra > 0)
-            nombre2ciudad.at(id_ciudad).vender_producto (comprar_id, aux.value().compra, pes_com, vol_com);
 
-        if (aux.value().venta > 0)
-            nombre2ciudad.at(id_ciudad).comprar_producto(vender_id , aux.value().venta , pes_ven, vol_ven);
+        if (in.compra > 0)
+            nombre2ciudad.at(id_ciudad).vender_producto (comprar_id, in.compra, pes_com, vol_com);
+
+        if (in.venta > 0)
+            nombre2ciudad.at(id_ciudad).comprar_producto(vender_id , in.venta , pes_ven, vol_ven);
     }
 
-    if (h > 1)
+    if (in.altura > 1)
     {
-        int lh = 0;
-        if (!aux.left().empty())  lh = aux.left().value().altura;
-        int rh = 0;
-        if (!aux.right().empty()) rh = aux.right().value().altura;
-
-        if (lh == h-1)
+        InfoViaje il = aux.left().value();
+        InfoViaje ir = aux.right().value();
+        
+        if (il.potencial() > ir.potencial())
         {
-            hacer_viaje_modificar_ciudades(cuenca.left(),nombre2ciudad,aux.left(),pes_com,vol_com,pes_ven,vol_ven,id_ciudad);
+            hacer_viaje_modificar_ciudades(cuenca.left(), nombre2ciudad, aux.left(), pes_com, vol_com, pes_ven, vol_ven, id_ciudad);
         }
-        else if (rh == h-1)
+        else if (il.potencial() < ir.potencial())
         {
-            hacer_viaje_modificar_ciudades(cuenca.right(),nombre2ciudad,aux.right(),pes_com,vol_com,pes_ven,vol_ven,id_ciudad);
+            hacer_viaje_modificar_ciudades(cuenca.right(), nombre2ciudad, aux.right(), pes_com, vol_com, pes_ven, vol_ven, id_ciudad);
+        }
+        else
+        {
+            if (il.altura > ir.altura)
+            {
+                hacer_viaje_modificar_ciudades(cuenca.right(), nombre2ciudad, aux.right(), pes_com, vol_com, pes_ven, vol_ven, id_ciudad);
+            }
+            else if (il.altura <= ir.altura)
+            {
+                hacer_viaje_modificar_ciudades(cuenca.left(), nombre2ciudad, aux.left(), pes_com, vol_com, pes_ven, vol_ven, id_ciudad);
+            }
         }
     }
 }
@@ -113,8 +122,8 @@ BinTree<InfoViaje> Barco::hacer_viaje_arbol_aux
     //     - La cuenca esta vacia
     //     - No queda más potencial de vender/comprar (es decir se han acabado los productos que el barco puede comerciar)
 
-    if (cuenca.empty())                                     return BinTree<InfoViaje>(v);
-    if (potencial_comprar <= 0 and potencial_vender <= 0)   return BinTree<InfoViaje>(v);
+    if (cuenca.empty())                                     return BinTree<InfoViaje>();
+    if (potencial_comprar <= 0 and potencial_vender <= 0)   return BinTree<InfoViaje>();
 
     // Caso recursivo:
 

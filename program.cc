@@ -35,13 +35,13 @@ void Error(string mensaje)
     cout << "error: " << mensaje << endl;
 }
 
-/** @brief  Subrutina auxiliar para leer y quitar <em>n</em> elementos (double) del canal de entrada.
+/** @brief  Subrutina auxiliar para leer y quitar <em>n</em> elementos (int) del canal de entrada.
             Util para poder seguir con la ejecucion del programa despues de un caso erroneo.
 \pre        n >= 0
 */
 void Desechar(int n)
 {
-    double d;
+    int d;
     for(int i = 0; i < n; ++i) cin >> d;
 }
 
@@ -62,12 +62,7 @@ int main()
 
     while (command != "fin")
     {
-        if (command == "__imprimir_cuenca")
-        {
-            cout << "Cuenca:" << endl;
-            r.__imprimir_cuenca();
-        }
-        else /**/ if (command == "leer_rio" or command == "lr")
+        if (command == "leer_rio" or command == "lr")
         {
             cout << '#' << command << endl;
             

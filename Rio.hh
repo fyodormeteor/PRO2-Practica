@@ -29,7 +29,7 @@ private:
     Barco barco;
     
     map<string, Ciudad> nombre2ciudad;
-    vector<pair<double,double>> id2infoprod;
+    vector<pair<int,int>> id2infoprod;
     
 
     /** @brief  Auxiliar.
@@ -50,14 +50,6 @@ private:
     void redistribuir_rec(const BinTree<string>& b);
 
 public:
-
-// Prueba
-
-    void __imprimir_cuenca()
-    {
-        cuenca.setOutputFormat(BinTree<string>::VISUALFORMAT);
-        cout << cuenca << endl;
-    }   
 
 // Constructores
 
@@ -95,7 +87,7 @@ public:
     void leer_barco();
 
     /** @brief  *
-    \pre        El canal de entrada contiene el id de un producto que existe (int >= 0) y cantidad & necesidad (2 double >= 0)
+    \pre        El canal de entrada contiene el id de un producto que existe (int >= 0) y cantidad & necesidad (2 int >= 0)
     \post       *
     \coste      *
     */
@@ -173,14 +165,14 @@ public:
     \post       El resultado es el peso de un producto con identificador <em>id</em>
     \coste      *
     */
-    double peso_del_producto(const int id) const;
+    int peso_del_producto(const int id) const;
 
     /** @brief  Consulta el volumen de un producto.
     \pre        Informacion de producto con identificador <em>id</em> existe
     \post       El resultado es el volumen de un producto con identificador <em>id</em>
     \coste      *
     */
-    double volumen_del_producto(const int id) const;
+    int volumen_del_producto(const int id) const;
 
     /** @brief  Escribe la informacion (peso, volumen) de un producto.
     \pre        Informacion de producto con identificador <em>id</em> existe

@@ -15,6 +15,10 @@
 
 using namespace std;
 
+/** @struct InfoViaje
+    @brief Es usado para contener informacion auxiliar necesaria para la operacion hacer_viaje.
+*/
+
 struct InfoViaje
 {
     int altura;
@@ -62,7 +66,7 @@ private:
 
     void hacer_viaje_modificar_ciudades
     (const BinTree<string>& cuenca, map<string, Ciudad>& nombre2ciudad, const BinTree<InfoViaje>& aux,
-     double pes_com, double vol_com, double pes_ven, double vol_ven, string& id_ciudad);
+     int pes_com, int vol_com, int pes_ven, int vol_ven, string& id_ciudad);
 
 public:
 
@@ -111,15 +115,7 @@ public:
     \post       *
     \coste      *
     */
-    void hacer_viaje(const BinTree<string>& cuenca, map<string, Ciudad>& nombre2ciudad, const vector<pair<double,double>> id2infoprod);
-
-    // - compute auxiliar weighted tree (possibly with pair<weight,height>, where height of node = max(height.left, height.right) + 1)
-    // - travel aux tree parallel to original tree
-    // - modify cities during this travel
-    // - save the last city you sold/bought to/from, end the travel there
-    
-    // - o recorrido pre-orden con lista de 
-
+    void hacer_viaje(const BinTree<string>& cuenca, map<string, Ciudad>& nombre2ciudad, const vector<pair<int,int>> id2infoprod);
 };
 
 #endif

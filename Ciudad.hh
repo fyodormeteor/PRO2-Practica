@@ -25,8 +25,8 @@ private:
 
     map<int,Producto> inventario;
 
-    double peso_total;
-    double volumen_total;
+    int peso_total;
+    int volumen_total;
 
 public:
 
@@ -84,21 +84,21 @@ public:
     \post       *
     \coste      *
     */
-    void agregar_inventario(const int idprod, const double peso, const double volumen, const int cantidad, const int necesidad);
+    void agregar_inventario(const int idprod, const int peso, const int volumen, const int cantidad, const int necesidad);
 
     /** @brief  *
     \pre        Ciudad tiene el producto*
     \post       *
     \coste      *
     */
-    void modificar_inventario(const int idprod, const double peso, const double volumen, const int cantidad, const int necesidad);
+    void modificar_inventario(const int idprod, const int peso, const int volumen, const int cantidad, const int necesidad);
 
     /** @brief  *
     \pre        Ciudad tiene el producto*
     \post       *
     \coste      *
     */
-    void quitar_inventario(const int idprod, const double peso, const double volumen);
+    void quitar_inventario(const int idprod, const int peso, const int volumen);
 
     /** @brief  *
     \pre        *
@@ -126,21 +126,21 @@ public:
     \post       *
     \coste      *
     */
-    void comprar_producto(const int idprod, int cantidad, const double peso, const double volumen);
+    void comprar_producto(const int idprod, int cantidad, const int peso, const int volumen);
 
     /** @brief  *
     \pre        *
     \post       *
     \coste      *
     */
-    void vender_producto(const int idprod, int cantidad, const double peso, const double volumen);
+    void vender_producto(const int idprod, int cantidad, const int peso, const int volumen);
 
     /** @brief  *
     \pre        *
     \post       *
     \coste      *
     */
-    void comerciar_con(Ciudad& c, const vector<pair<double,double>>& id2infoprod);
+    void comerciar_con(Ciudad& c, const vector<pair<int,int>>& id2infoprod);
 };
 
 #endif

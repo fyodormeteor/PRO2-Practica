@@ -5,7 +5,7 @@ Rio::Rio()
     cuenca = BinTree<string>();
     barco = Barco();
     nombre2ciudad = map<string, Ciudad>();
-    id2infoprod = vector<pair<double,double>>();
+    id2infoprod = vector<pair<int,int>>();
 }
 
 void Rio::leer_cuenca()
@@ -38,7 +38,7 @@ void Rio::leer_informacion_productos(const int cantidad)
 {
     for (int i = 0; i < cantidad; ++i)
     {
-        double p, v;
+        int p, v;
         cin >> p >> v;
         id2infoprod.push_back(make_pair(p, v));
     }
@@ -54,8 +54,8 @@ void Rio::leer_y_poner_producto_ciudad(const string nombre)
     int idprod, cant, necd;
     cin >> idprod >> cant >> necd;
 
-    double p = peso_del_producto(idprod);
-    double v = volumen_del_producto(idprod);
+    int p = peso_del_producto(idprod);
+    int v = volumen_del_producto(idprod);
     nombre2ciudad[nombre].agregar_inventario(idprod, p, v, cant, necd);
 }
 
@@ -88,24 +88,24 @@ void Rio::reinicializar_inventario_de_ciudad(const string nombre)
 
 void Rio::agregar_inventario_de_ciudad(const string nombre, const int idprod, const int cant, const int necd)
 {
-    double p = peso_del_producto(idprod);
-    double v = volumen_del_producto(idprod);
+    int p = peso_del_producto(idprod);
+    int v = volumen_del_producto(idprod);
     nombre2ciudad[nombre].agregar_inventario(idprod, p, v, cant, necd);
     nombre2ciudad[nombre].escribir_peso_y_volumen();
 }
 
 void Rio::modificar_inventario_de_ciudad(const string nombre, const int idprod, const int cant, const int necd)
 {
-    double p = peso_del_producto(idprod);
-    double v = volumen_del_producto(idprod);
+    int p = peso_del_producto(idprod);
+    int v = volumen_del_producto(idprod);
     nombre2ciudad[nombre].modificar_inventario(idprod, p, v, cant, necd);
     nombre2ciudad[nombre].escribir_peso_y_volumen();
 }
 
 void Rio::quitar_inventario_de_ciudad(const string nombre, const int idprod)
 {
-    double p = peso_del_producto(idprod);
-    double v = volumen_del_producto(idprod);
+    int p = peso_del_producto(idprod);
+    int v = volumen_del_producto(idprod);
     nombre2ciudad[nombre].quitar_inventario(idprod, p, v);
     nombre2ciudad[nombre].escribir_peso_y_volumen();
 }
@@ -115,12 +115,12 @@ bool Rio::existe_producto(const int id) const
     return (id-1 < cantidad_de_productos());
 }
 
-double Rio::peso_del_producto(const int id) const
+int Rio::peso_del_producto(const int id) const
 {
     return id2infoprod[id-1].first;
 }
 
-double Rio::volumen_del_producto(const int id) const
+int Rio::volumen_del_producto(const int id) const
 {
     return id2infoprod[id-1].second;
 }

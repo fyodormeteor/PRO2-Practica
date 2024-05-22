@@ -24,7 +24,11 @@ private:
 
 public:
     
-    // ??
+    /** @brief  Creadora por defecto
+    \pre        <em>cierto</em>
+    \post       El resultado es Producto con cantidad 0 y necesidad 1
+    \coste      *
+    */
     Producto();
     
     /** @brief  Creadora que inicializa la cantidad y la necesidad.

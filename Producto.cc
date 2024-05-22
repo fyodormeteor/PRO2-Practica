@@ -2,7 +2,8 @@
 
 Producto::Producto()
 {
-    
+    cantidad = 0;
+    necesidad = 1;
 }
 
 Producto::Producto(const int cant, const int necd)
