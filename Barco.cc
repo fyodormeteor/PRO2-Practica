@@ -62,10 +62,11 @@ void Barco::hacer_viaje(const BinTree<string>& cuenca, map<string, Ciudad>& nomb
 
     string ultima_ciudad = "";
 
-    if (arbol_aux.value().altura > 0)
+    if (arbol_aux.value().altura != 0)
+    {
         hacer_viaje_modificar_ciudades(cuenca, nombre2ciudad, arbol_aux, pes_com, vol_com, pes_ven, vol_ven, ultima_ciudad);
-
-    if (arbol_aux.value().potencial() != 0) cronologia.push_back(ultima_ciudad);
+        cronologia.push_back(ultima_ciudad);
+    }
 
     cout << arbol_aux.value().potencial() << endl;
 }
@@ -74,34 +75,32 @@ void Barco::hacer_viaje_modificar_ciudades
 (const BinTree<string>& cuenca, map<string, Ciudad>& nombre2ciudad, const BinTree<InfoViaje>& aux,
  double pes_com, double vol_com, double pes_ven, double vol_ven, string& id_ciudad)
 {
-    if (aux.value().compra > 0 or aux.value().venta > 0) id_ciudad = cuenca.value();
-
-    if (aux.value().compra > 0)
-        nombre2ciudad.at(id_ciudad).vender_producto (comprar_id, aux.value().compra, pes_com, vol_com);
-
-    if (aux.value().venta > 0)
-        nombre2ciudad.at(id_ciudad).comprar_producto(vender_id , aux.value().venta , pes_ven, vol_ven);
-
-    if (aux.value().altura > 1)
+    int h = aux.value().altura;
+    
+    if (h == 1)
     {
-        if(aux.left().value().potencial() > aux.right().value().potencial())
+        id_ciudad = cuenca.value();
+        if (aux.value().compra > 0)
+            nombre2ciudad.at(id_ciudad).vender_producto (comprar_id, aux.value().compra, pes_com, vol_com);
+
+        if (aux.value().venta > 0)
+            nombre2ciudad.at(id_ciudad).comprar_producto(vender_id , aux.value().venta , pes_ven, vol_ven);
+    }
+
+    if (h > 1)
+    {
+        int lh = 0;
+        if (!aux.left().empty())  lh = aux.left().value().altura;
+        int rh = 0;
+        if (!aux.right().empty()) rh = aux.right().value().altura;
+
+        if (lh == h-1)
         {
-            hacer_viaje_modificar_ciudades(cuenca.left(), nombre2ciudad, aux.left(), pes_com, vol_com, pes_ven, vol_ven, id_ciudad);
+            hacer_viaje_modificar_ciudades(cuenca.left(),nombre2ciudad,aux.left(),pes_com,vol_com,pes_ven,vol_ven,id_ciudad);
         }
-        else if(aux.left().value().potencial() < aux.right().value().potencial())
+        else if (rh == h-1)
         {
-            hacer_viaje_modificar_ciudades(cuenca.right(), nombre2ciudad, aux.right(), pes_com, vol_com, pes_ven, vol_ven, id_ciudad);
-        }
-        else
-        {
-            if (aux.left().value().altura > aux.right().value().altura)
-            {
-                hacer_viaje_modificar_ciudades(cuenca.right(), nombre2ciudad, aux.right(), pes_com, vol_com, pes_ven, vol_ven, id_ciudad);
-            }
-            if (aux.left().value().altura <= aux.right().value().altura) //?
-            {
-                hacer_viaje_modificar_ciudades(cuenca.left(), nombre2ciudad, aux.left(), pes_com, vol_com, pes_ven, vol_ven, id_ciudad);
-            }
+            hacer_viaje_modificar_ciudades(cuenca.right(),nombre2ciudad,aux.right(),pes_com,vol_com,pes_ven,vol_ven,id_ciudad);
         }
     }
 }
@@ -114,8 +113,8 @@ BinTree<InfoViaje> Barco::hacer_viaje_arbol_aux
     //     - La cuenca esta vacia
     //     - No queda más potencial de vender/comprar (es decir se han acabado los productos que el barco puede comerciar)
 
-    if (cuenca.empty())                                     return BinTree<InfoViaje>();
-    if (potencial_comprar <= 0 and potencial_vender <= 0)   return BinTree<InfoViaje>();
+    if (cuenca.empty())                                     return BinTree<InfoViaje>(v);
+    if (potencial_comprar <= 0 and potencial_vender <= 0)   return BinTree<InfoViaje>(v);
 
     // Caso recursivo:
 
@@ -153,7 +152,12 @@ BinTree<InfoViaje> Barco::hacer_viaje_arbol_aux
     auto r = hacer_viaje_arbol_aux(cuenca.right(), nombre2ciudad, potencial_comprar-v.compra, potencial_vender-v.venta);
 
         /* Calculo de los atributos del nodo (InfoViaje)
-           3 casos:
+           4 casos:
+               - Potencial izq. == Potencial der. == 0
+                    Si no se compra/vende nada en el nodo, 'altura' es 0. En caso contrario 'altura' es 1.
+                    'compra_acumulada' es la compra del nodo.
+                    (Similarmente con 'venta_acumulada')
+
                - Potencial izq. >  Potencial der.
                     'altura' es la altura del subarbol izq. + 1
                     'compra_acumulada' es la suma de la compra acumulada del subarbol izq. y la compra del nodo.
@@ -164,12 +168,10 @@ BinTree<InfoViaje> Barco::hacer_viaje_arbol_aux
                     'compra_acumulada' es la suma de la compra acumulada del subarbol der. y la compra del nodo.
                     (Similarmente con 'venta_acumulada')
 
-               - Potencial izq. == Potencial der.
+               - Potencial izq. == Potencial der. != 0
                     'altura' del nodo es la altura minima de los dos subarboles + 1
                     'compra_acumulada' es la suma de la compra acumulada del subarbol con menor altura y la compra del nodo.
                     (Similarmente con 'venta_acumulada')
-                    (Si las dos alturas son iguales, se escoge el subarbol izq.)
-        
         */
     
     int lpot = 0;
@@ -178,7 +180,14 @@ BinTree<InfoViaje> Barco::hacer_viaje_arbol_aux
     int rpot = 0;
     if (!r.empty()) rpot = r.value().potencial();
 
-    if (lpot > rpot)
+    if (lpot == 0 and rpot == 0)
+    {    
+        v.altura = 0;
+        v.compra_acumulada = v.compra;
+        v.venta_acumulada = v.venta;
+        if (v.potencial() > 0) v.altura = 1;
+    }
+    else if (lpot > rpot)
     {
         v.altura = l.value().altura + 1;
         v.compra_acumulada = l.value().compra_acumulada + v.compra;
@@ -192,26 +201,16 @@ BinTree<InfoViaje> Barco::hacer_viaje_arbol_aux
     }
     else
     {
-        if (!(lpot == 0 and rpot == 0))
-        {    
-            v.altura = min(l.value().altura, l.value().altura) + 1;
-            if (l.value().altura > r.value().altura)
-            {
-                v.compra_acumulada = r.value().compra_acumulada + v.compra;
-                v.venta_acumulada  = r.value().venta_acumulada + v.venta;
-            }
-            else if (l.value().altura <= r.value().altura)
-            {
-                v.compra_acumulada = l.value().compra_acumulada + v.compra;
-                v.venta_acumulada  = l.value().venta_acumulada + v.venta;
-            }
-        }
-        else
+        v.altura = min(l.value().altura, r.value().altura) + 1;
+        if (l.value().altura > r.value().altura)
         {
-            v.altura = 0;
-            if (v.compra > 0 or v.venta > 0) v.altura = 1;
-            v.compra_acumulada = v.compra;
-            v.venta_acumulada = v.venta;
+            v.compra_acumulada = r.value().compra_acumulada + v.compra;
+            v.venta_acumulada  = r.value().venta_acumulada + v.venta;
+        }
+        else if (l.value().altura <= r.value().altura)
+        {
+            v.compra_acumulada = l.value().compra_acumulada + v.compra;
+            v.venta_acumulada  = l.value().venta_acumulada + v.venta;
         }
     }
 

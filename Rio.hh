@@ -51,6 +51,14 @@ private:
 
 public:
 
+// Prueba
+
+    void __imprimir_cuenca()
+    {
+        cuenca.setOutputFormat(BinTree<string>::VISUALFORMAT);
+        cout << cuenca << endl;
+    }   
+
 // Constructores
 
     /** @brief  Creadora por defecto.

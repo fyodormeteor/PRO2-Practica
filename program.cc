@@ -62,7 +62,12 @@ int main()
 
     while (command != "fin")
     {
-        if (command == "leer_rio" or command == "lr")
+        if (command == "__imprimir_cuenca")
+        {
+            cout << "Cuenca:" << endl;
+            r.__imprimir_cuenca();
+        }
+        else /**/ if (command == "leer_rio" or command == "lr")
         {
             cout << '#' << command << endl;
             
