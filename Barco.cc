@@ -114,8 +114,8 @@ BinTree<InfoViaje> Barco::hacer_viaje_arbol_aux
     //     - La cuenca esta vacia
     //     - No queda más potencial de vender/comprar (es decir se han acabado los productos que el barco puede comerciar)
 
-    if (cuenca.empty())                                     return BinTree<InfoViaje>(v);
-    if (potencial_comprar <= 0 and potencial_vender <= 0)   return BinTree<InfoViaje>(v);
+    if (cuenca.empty())                                     return BinTree<InfoViaje>();
+    if (potencial_comprar <= 0 and potencial_vender <= 0)   return BinTree<InfoViaje>();
 
     // Caso recursivo:
 
@@ -172,13 +172,19 @@ BinTree<InfoViaje> Barco::hacer_viaje_arbol_aux
         
         */
     
-    if (l.value().potencial() > r.value().potencial())
+    int lpot = 0;
+    if (!l.empty()) lpot = l.value().potencial();
+
+    int rpot = 0;
+    if (!r.empty()) rpot = r.value().potencial();
+
+    if (lpot > rpot)
     {
         v.altura = l.value().altura + 1;
         v.compra_acumulada = l.value().compra_acumulada + v.compra;
         v.venta_acumulada  = l.value().venta_acumulada + v.venta;
     }
-    else if (l.value().potencial() < r.value().potencial())
+    else if (lpot < rpot)
     {
         v.altura = r.value().altura + 1;
         v.compra_acumulada = r.value().compra_acumulada + v.compra;
@@ -186,16 +192,26 @@ BinTree<InfoViaje> Barco::hacer_viaje_arbol_aux
     }
     else
     {
-        v.altura = min(l.value().altura, l.value().altura) + 1;
-        if (l.value().altura > r.value().altura)
-        {
-            v.compra_acumulada = r.value().compra_acumulada + v.compra;
-            v.venta_acumulada  = r.value().venta_acumulada + v.venta;
+        if (!(lpot == 0 and rpot == 0))
+        {    
+            v.altura = min(l.value().altura, l.value().altura) + 1;
+            if (l.value().altura > r.value().altura)
+            {
+                v.compra_acumulada = r.value().compra_acumulada + v.compra;
+                v.venta_acumulada  = r.value().venta_acumulada + v.venta;
+            }
+            else if (l.value().altura <= r.value().altura)
+            {
+                v.compra_acumulada = l.value().compra_acumulada + v.compra;
+                v.venta_acumulada  = l.value().venta_acumulada + v.venta;
+            }
         }
-        else if (l.value().altura <= r.value().altura)
+        else
         {
-            v.compra_acumulada = l.value().compra_acumulada + v.compra;
-            v.venta_acumulada  = l.value().venta_acumulada + v.venta;
+            v.altura = 0;
+            if (v.compra > 0 or v.venta > 0) v.altura = 1;
+            v.compra_acumulada = v.compra;
+            v.venta_acumulada = v.venta;
         }
     }
 
