@@ -93,7 +93,7 @@ int Ciudad::exceso_de_producto_en_inventario(const int idprod) const
 
 void Ciudad::comprar_producto(const int idprod, int cantidad, const double peso, const double volumen)
 {
-    inventario.at(idprod) += cantidad;
+    inventario.at(idprod-1) += cantidad;
 
     peso_total += peso*cantidad;
     volumen_total += volumen*cantidad;
@@ -101,7 +101,7 @@ void Ciudad::comprar_producto(const int idprod, int cantidad, const double peso,
 
 void Ciudad::vender_producto(const int idprod, int cantidad, const double peso, const double volumen)
 {
-    inventario.at(idprod) += -cantidad;
+    inventario.at(idprod-1) += -cantidad;
 
     peso_total -= peso*cantidad;
     volumen_total -= volumen*cantidad;

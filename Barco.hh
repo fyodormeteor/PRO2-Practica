@@ -6,7 +6,7 @@
 #define _BARCO_HH_
 
 #ifndef NO_DIAGRAM
-#include "BinTree.cc"
+#include "BinTree.hh"
 #include "Ciudad.hh"
 #include <iostream>
 #include <list>

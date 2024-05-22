@@ -141,7 +141,7 @@ escribir_ciudad cerna
 escribir_ciudad birna
 escribir_barco
 lr
-darna
+darna 
 derna
 dirna
 #

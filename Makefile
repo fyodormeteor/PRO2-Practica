@@ -1,8 +1,7 @@
-OPCIONS = 
-#-D_JUDGE_ -D_GLIBCXX_DEBUG -O2 -Wall -Wextra -Werror -Wno-sign-compare -std=c++11 -fno-extended-identifiers
+OPCIONS = -D_JUDGE_ -D_GLIBCXX_DEBUG -O2 -Wall -Wextra -Werror -Wno-sign-compare -std=c++11 -fno-extended-identifiers
 
-x: program.o Rio.o Ciudad.o Barco.o Producto.o BinTree.o
-	g++ -o x program.o Rio.o Ciudad.o Barco.o Producto.o BinTree.o
+program.exe: program.o Rio.o Ciudad.o Barco.o Producto.o
+	g++ -o program.exe program.o Rio.o Ciudad.o Barco.o Producto.o
 
 Rio.o: Rio.cc
 	g++ -c Rio.cc $(OPCIONS)
@@ -16,9 +15,6 @@ Barco.o: Barco.cc
 Producto.o: Producto.cc
 	g++ -c Producto.cc $(OPCIONS)
 
-BinTree.o: BinTree.cc
-	g++ -c BinTree.cc $(OPCIONS)
-
 program.o: program.cc
 	g++ -c program.cc $(OPCIONS)
 
@@ -26,3 +22,5 @@ clean:
 	rm -f *.o
 	rm -f *.exe
 	
+tar: Rio.hh Rio.cc Ciudad.hh Ciudad.cc Barco.hh Barco.cc Producto.hh Producto.cc program.cc Makefile
+	tar -cvf practica.tar Rio.cc Rio.hh Ciudad.cc Ciudad.hh Barco.cc Barco.hh Producto.cc Producto.hh program.cc Makefile

@@ -65,16 +65,16 @@ void Barco::hacer_viaje(const BinTree<string>& cuenca, map<string, Ciudad>& nomb
     if (arbol_aux.value().altura > 0)
         hacer_viaje_modificar_ciudades(cuenca, nombre2ciudad, arbol_aux, pes_com, vol_com, pes_ven, vol_ven, ultima_ciudad);
 
-    cronologia.push_back(ultima_ciudad);
+    if (arbol_aux.value().potencial() != 0) cronologia.push_back(ultima_ciudad);
 
-    cout << arbol_aux.value().compra_acumulada << ' ' << arbol_aux.value().venta_acumulada << endl;
+    cout << arbol_aux.value().potencial() << endl;
 }
 
 void Barco::hacer_viaje_modificar_ciudades
 (const BinTree<string>& cuenca, map<string, Ciudad>& nombre2ciudad, const BinTree<InfoViaje>& aux,
  double pes_com, double vol_com, double pes_ven, double vol_ven, string& id_ciudad)
 {
-    id_ciudad = cuenca.value();
+    if (aux.value().compra > 0 or aux.value().venta > 0) id_ciudad = cuenca.value();
 
     if (aux.value().compra > 0)
         nombre2ciudad.at(id_ciudad).vender_producto (comprar_id, aux.value().compra, pes_com, vol_com);

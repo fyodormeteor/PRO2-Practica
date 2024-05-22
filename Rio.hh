@@ -9,7 +9,7 @@
 #include "Barco.hh"
 
 #ifndef NO_DIAGRAM
-#include "BinTree.cc"
+#include "BinTree.hh"
 #include <iostream>
 #include <map>
 #include <vector>
