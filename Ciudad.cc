@@ -1,9 +1,14 @@
+/** @file Ciudad.cc
+    @brief Implementación de la clase Ciudad
+*/
+
+
 #include "Ciudad.hh"
 
 Ciudad::Ciudad()
 {
-    peso_total = .0;
-    volumen_total = .0;
+    peso_total = 0;
+    volumen_total = 0;
 }
 
 void Ciudad::escribir_peso_y_volumen() const
@@ -39,14 +44,14 @@ bool Ciudad::existe_producto_en_inventario(const int id) const
 
 void Ciudad::escribir_producto(int id) const
 {
-    inventario.at(id-1).escribir();
+    inventario.at(id-1). Producto::escribir();
 }
 
 void Ciudad::reinicializar_inventario()
 {
     inventario.clear(); // .clear() Linear in size
-    peso_total = .0;
-    volumen_total = .0;
+    peso_total = 0;
+    volumen_total = 0;
 }
 
 void Ciudad::agregar_inventario(const int idprod, const int peso, const int volumen, const int cantidad, const int necesidad)
@@ -61,8 +66,8 @@ void Ciudad::modificar_inventario(const int idprod, const int peso, const int vo
     peso_total -= cantidad_de_producto_en_inventario(idprod)*peso;
     volumen_total -= cantidad_de_producto_en_inventario(idprod)*volumen;
 
-    inventario[idprod-1].establecer_cantidad(cantidad);
-    inventario[idprod-1].establecer_necesidad(necesidad);
+    inventario[idprod-1]. Producto::establecer_cantidad(cantidad);
+    inventario[idprod-1]. Producto::establecer_necesidad(necesidad);
 
     peso_total += cantidad*peso;
     volumen_total += cantidad*volumen;
@@ -78,33 +83,28 @@ void Ciudad::quitar_inventario(const int idprod, const int peso, const int volum
 
 int Ciudad::cantidad_de_producto_en_inventario(const int idprod) const
 {
-    return inventario.at(idprod-1).obtener_cantidad();
-}
-
-int Ciudad::necesidad_de_producto_en_inventario(const int idprod) const
-{
-    return inventario.at(idprod-1).obtener_necesidad();
+    return inventario.at(idprod-1). Producto::obtener_cantidad();
 }
 
 int Ciudad::exceso_de_producto_en_inventario(const int idprod) const
 {
-    return inventario.at(idprod-1).obtener_exceso();
+    return inventario.at(idprod-1). Producto::obtener_exceso();
 }
 
-void Ciudad::comprar_producto(const int idprod, int cantidad, const int peso, const int volumen)
+void Ciudad::comprar_producto(const int idprod, int cant, const int peso, const int volumen)
 {
-    inventario.at(idprod-1) += cantidad;
+    inventario.at(idprod-1) += cant;
 
-    peso_total += peso*cantidad;
-    volumen_total += volumen*cantidad;
+    peso_total += peso*cant;
+    volumen_total += volumen*cant;
 }
 
-void Ciudad::vender_producto(const int idprod, int cantidad, const int peso, const int volumen)
+void Ciudad::vender_producto(const int idprod, int cant, const int peso, const int volumen)
 {
-    inventario.at(idprod-1) += -cantidad;
+    inventario.at(idprod-1) += -cant;
 
-    peso_total -= peso*cantidad;
-    volumen_total -= volumen*cantidad;
+    peso_total -= peso*cant;
+    volumen_total -= volumen*cant;
 }
 
 void Ciudad::comerciar_con(Ciudad& c, const vector<pair<int,int>>& id2infoprod)
@@ -112,8 +112,8 @@ void Ciudad::comerciar_con(Ciudad& c, const vector<pair<int,int>>& id2infoprod)
     map<int,Producto>::iterator it1 = inventario.begin();
     map<int,Producto>::iterator it2 = c.inventario.begin();
 
-    int cambio_peso = .0;
-    int cambio_volumen = .0;
+    int cambio_peso = 0;
+    int cambio_volumen = 0;
 
     while(it1 != inventario.end() and it2 != c.inventario.end())
     {
@@ -124,8 +124,8 @@ void Ciudad::comerciar_con(Ciudad& c, const vector<pair<int,int>>& id2infoprod)
 
         if (it1->first == it2->first)
         {
-            int c1_exceso = it1->second.obtener_exceso();
-            int c2_exceso = it2->second.obtener_exceso();
+            int c1_exceso = it1->second. Producto::obtener_exceso();
+            int c2_exceso = it2->second. Producto::obtener_exceso();
 
             // 2 casos:
             //     - Ambas ciudades quieren o les sobra el producto:      no hacer nada

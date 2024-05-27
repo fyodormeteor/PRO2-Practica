@@ -1,3 +1,8 @@
+/** @file Producto.cc
+    @brief Implementación de la clase Producto
+*/
+
+
 #include "Producto.hh"
 
 Producto::Producto()
@@ -29,7 +34,7 @@ int Producto::obtener_necesidad() const
 
 int Producto::obtener_exceso() const
 {
-    return cantidad - necesidad;
+    return obtener_cantidad() - obtener_necesidad();
 }
 
 void Producto::establecer_cantidad(const int cant)

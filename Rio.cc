@@ -1,3 +1,7 @@
+/** @file Rio.cc
+    @brief Implementación de la clase Rio
+*/
+
 #include "Rio.hh"
 
 Rio::Rio() 
@@ -56,7 +60,7 @@ void Rio::leer_y_poner_producto_ciudad(const string nombre)
 
     int p = peso_del_producto(idprod);
     int v = volumen_del_producto(idprod);
-    nombre2ciudad[nombre].agregar_inventario(idprod, p, v, cant, necd);
+    nombre2ciudad[nombre]. Ciudad::agregar_inventario(idprod, p, v, cant, necd);
 }
 
 bool Rio::existe_ciudad(const string nombre) const
@@ -68,46 +72,46 @@ bool Rio::existe_ciudad(const string nombre) const
 
 void Rio::escribir_ciudad(const string nombre) const
 {
-    nombre2ciudad.at(nombre).escribir();
+    nombre2ciudad.at(nombre). Ciudad::escribir();
 }
 
 bool Rio::ciudad_tiene_producto(const string nombre, const int idprod) const
 {
-    return nombre2ciudad.at(nombre).existe_producto_en_inventario(idprod);
+    return nombre2ciudad.at(nombre). Ciudad::existe_producto_en_inventario(idprod);
 }
 
 void Rio::escribir_producto_de_ciudad(const string nombre, const int idprod) const
 {
-    nombre2ciudad.at(nombre).escribir_producto(idprod);
+    nombre2ciudad.at(nombre). Ciudad::escribir_producto(idprod);
 }
 
 void Rio::reinicializar_inventario_de_ciudad(const string nombre)
 {
-    nombre2ciudad[nombre].reinicializar_inventario();
+    nombre2ciudad[nombre]. Ciudad::reinicializar_inventario();
 }
 
 void Rio::agregar_inventario_de_ciudad(const string nombre, const int idprod, const int cant, const int necd)
 {
     int p = peso_del_producto(idprod);
     int v = volumen_del_producto(idprod);
-    nombre2ciudad[nombre].agregar_inventario(idprod, p, v, cant, necd);
-    nombre2ciudad[nombre].escribir_peso_y_volumen();
+    nombre2ciudad[nombre]. Ciudad::agregar_inventario(idprod, p, v, cant, necd);
+    nombre2ciudad[nombre]. Ciudad::escribir_peso_y_volumen();
 }
 
 void Rio::modificar_inventario_de_ciudad(const string nombre, const int idprod, const int cant, const int necd)
 {
     int p = peso_del_producto(idprod);
     int v = volumen_del_producto(idprod);
-    nombre2ciudad[nombre].modificar_inventario(idprod, p, v, cant, necd);
-    nombre2ciudad[nombre].escribir_peso_y_volumen();
+    nombre2ciudad[nombre]. Ciudad::modificar_inventario(idprod, p, v, cant, necd);
+    nombre2ciudad[nombre]. Ciudad::escribir_peso_y_volumen();
 }
 
 void Rio::quitar_inventario_de_ciudad(const string nombre, const int idprod)
 {
     int p = peso_del_producto(idprod);
     int v = volumen_del_producto(idprod);
-    nombre2ciudad[nombre].quitar_inventario(idprod, p, v);
-    nombre2ciudad[nombre].escribir_peso_y_volumen();
+    nombre2ciudad[nombre]. Ciudad::quitar_inventario(idprod, p, v);
+    nombre2ciudad[nombre]. Ciudad::escribir_peso_y_volumen();
 }
 
 bool Rio::existe_producto(const int id) const
@@ -152,7 +156,7 @@ void Rio::hacer_viaje_en_barco()
 
 void Rio::comerciar(const string nombre1, const string nombre2)
 {
-    nombre2ciudad[nombre1].comerciar_con(nombre2ciudad[nombre2], id2infoprod);
+    nombre2ciudad[nombre1]. Ciudad::comerciar_con(nombre2ciudad[nombre2], id2infoprod);
 }
 
 void Rio::redistribuir()

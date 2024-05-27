@@ -1,25 +1,40 @@
 /**
- * @mainpage Ejemplo de diseño modular:  Gestión de una lavadora.
- 
-En este ejemplo se construye un programa modular que ofrece un menú de opciones para gestionar una lavadora.
-Se introducen las clases <em>Lavadora</em>, <em>Cubeta</em> y <em>Prenda</em>.
-
-Sólo se documentan elementos públicos. En una próxima sesión se verá un ejemplo
-de proyecto completamente documentado, incluyendo los elementos privados.
+ * @mainpage
+ * Especificación y implementación de un programa diseñado para simular el comercio entre ciudades conectadas por una cuenca.
+ * En el archivo program.cc se encuentra el main del programa, junto a unas subrutinas auxiliares y defines que ayudan a lidiar con
+ * inputs erroneos. En los archivos Rio.hh, Ciudad.hh, Barco.hh y Producto.hh se encuentran las especificaciones de las clases usadas
+ * en el programa. En los archivos Rio.cc, Ciudad.cc, Barco.cc y Producto.cc se encuentran las implementaciones de las mismas clases.
 */
 
 /** @file program.cc
-    @brief Programa principal para el proyecto *
+    @brief Programa principal
 */
 
 #include "Rio.hh"
-#include "Ciudad.hh"
-#include "Barco.hh"
 
 #ifndef NO_DIAGRAM 
 #include <string>
+#include "Ciudad.hh"
+#include "Barco.hh"
 #endif
 
+using namespace std;
+
+/** @def ERR_CIUDADNOEXISTE
+ * Mensaje de error para cuando Ciudad no existe.
+ *  @def ERR_PRODUCTONOEXISTE
+ * Mensaje de error para cuando la informacion de un producto no existe.
+ *  @def ERR_MISMOPRODUCTO
+ * Mensaje de error para cuando se hace referencia a un mismo producto.
+ *  @def ERR_CIUDADNOTIENEPRODUCTO
+ * Mensaje de error para cuando Ciudad no tiene un Producto.
+ *  @def ERR_CIUDADYATIENEPRODUCTO
+ * Mensaje de error para cuando Ciudad ya tiene un Producto.
+ *  @def ERR_CIUDADREPETIDA
+ * Mensaje de error para cuando se hace referencia a la misma Ciudad.
+ *  @def ERR_COMANDOINVALIDO
+ * Mensaje de error para cuando un comando es invalido.
+ */
 #define ERR_CIUDADNOEXISTE          "no existe la ciudad"
 #define ERR_PRODUCTONOEXISTE        "no existe el producto"
 #define ERR_MISMOPRODUCTO           "no se puede comprar y vender el mismo producto"
@@ -27,6 +42,7 @@ de proyecto completamente documentado, incluyendo los elementos privados.
 #define ERR_CIUDADYATIENEPRODUCTO   "la ciudad ya tiene el producto"
 #define ERR_CIUDADREPETIDA          "ciudad repetida"
 #define ERR_COMANDOINVALIDO         "comando invalido"
+
 
 /** @brief  Subrutina auxiliar para facilitar la escritura de errores.
 */
@@ -36,7 +52,6 @@ void Error(string mensaje)
 }
 
 /** @brief  Subrutina auxiliar para leer y quitar <em>n</em> elementos (int) del canal de entrada.
-            Util para poder seguir con la ejecucion del programa despues de un caso erroneo.
 \pre        n >= 0
 */
 void Desechar(int n)
@@ -45,7 +60,7 @@ void Desechar(int n)
     for(int i = 0; i < n; ++i) cin >> d;
 }
 
-/** @brief  Programa principal para el proyecto
+/** @brief  Programa principal.
 */
 int main()
 {
