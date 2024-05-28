@@ -83,6 +83,9 @@ void Ciudad::quitar_inventario(const int idprod, const int peso, const int volum
 
 int Ciudad::cantidad_de_producto_en_inventario(const int idprod) const
 {
+    // El espacio entre  ...idprod.1). Producto::obt...
+    // esta para que se genere un hyperlink al metodo obtener_cantidad de Producto en la documentacion.
+    // Similarmente, habran espacios en mas sitios.
     return inventario.at(idprod-1). Producto::obtener_cantidad();
 }
 

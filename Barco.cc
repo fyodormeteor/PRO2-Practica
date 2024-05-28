@@ -2,8 +2,48 @@
     @brief Implementación de la clase Barco
 */
 
-
 #include "Barco.hh"
+
+struct Barco::InfoViaje
+{
+    /** @brief Almacena la altura. Cuanto menor la 'altura', mas corta es la ruta.
+    */
+    int altura;
+
+    /** @brief Almacena la compra acumulada. Es la cantidad total que el Barco podra comprar en toda la ruta.
+    */
+    int compra_acumulada;
+
+    /** @brief Almacena la venta acumulada. Es la cantidad total que el Barco podra vender en toda la ruta.
+    */
+    int venta_acumulada;
+
+    /** @brief Almacena la compra. Es la cantidad que el Barco puede comprar en una Ciudad particular de la ruta.
+    */
+    int compra;
+
+    /** @brief Almacena la venta. Es la cantidad que el Barco puede vender en una Ciudad particular de de la ruta.
+    */
+    int venta;
+    
+    /** @brief Constructora por defecto.
+    */
+    InfoViaje()
+    {
+        altura = 0;
+        compra = 0;
+        venta  = 0;
+        compra_acumulada = 0;
+        venta_acumulada = 0;
+    }
+
+    /** @brief El "potencial" es igual a la suma de la compra y venta total de la ruta.
+    */
+    int potencial() const
+    {
+        return compra_acumulada+venta_acumulada;
+    }
+};
 
 Barco::Barco()
 {
